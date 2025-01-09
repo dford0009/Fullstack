@@ -1,6 +1,7 @@
 //const http = require('http')
 const express = require('express')
 const cors = require('cors')
+
 const app = express()
 
 app.use(express.json())
@@ -97,7 +98,7 @@ app.use(unknownEndpoint)
 //  response.end(JSON.stringify(notes))
 //})
 
-const PORT = process.env.PORT || 3001
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 3000
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on ${PORT}`);
 });

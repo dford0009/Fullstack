@@ -1,9 +1,12 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 
 const app = express()
 
 app.use(express.json())
+app.use(cors())
+app.use(express.static('dist'))
 
 //app.use((req, res, next) => {
 //  console.log(`Request Method: ${req.method}, Request URL: ${req.url}`);
@@ -71,7 +74,7 @@ app.get('/api/persons/:id', (request, response) => {
 
 const generateId = () => {
   const range = 1000000000
-  const maxId = math.floor(math.random()*range)+1
+  const maxId = Math.floor(Math.random()*range)+1
   return String(maxId)
 }
 
@@ -111,7 +114,7 @@ app.delete('/api/persons/:id', (request, response) => {
 
 
 
-const PORT = 3001
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 3000
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on ${PORT}`);
 });

@@ -1,15 +1,15 @@
-# fly.toml app configuration file generated for phonebook-withered-wildflower-3019 on 2025-01-06T21:47:30-08:00
+# fly.toml app configuration file generated for phonebook-fragrant-smoke-1522 on 2025-01-07T19:10:41-08:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'phonebook-withered-wildflower-3019'
+app = 'phonebook-fragrant-smoke-1522'
 primary_region = 'dfw'
 
 [build]
 
 [env]
-  PORT = "3000"
+  PORT = '3000'
 
 [http_service]
   internal_port = 3000
