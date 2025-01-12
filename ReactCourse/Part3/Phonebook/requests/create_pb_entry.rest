@@ -1,0 +1,28 @@
+POST http://localhost:3000/api/persons 
+Content-Type: application/json
+
+{
+  "name": "Sam Heartfield",
+  "number": "903-66666"
+}
+//ADD NEW PERSON
+
+###
+DELETE http://localhost:3000/api/persons/6781e0dab13af62a63ab840b
+//DELETE PERSON
+
+###
+GET http://localhost:3000/api/persons 
+//GET ALL PERSONS
+
+###
+GET http://localhost:3000/info
+//GET INFO
+
+### 
+GET http://localhost:3000/api/persons/6781e0dab13af62a63ab840b
+//NOT FOUND PERSON
+
+###
+GET http://localhost:3000/api/persons/6781e466dc984346a76a35db
+//FOUND PERSON

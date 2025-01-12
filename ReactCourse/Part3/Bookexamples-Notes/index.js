@@ -1,6 +1,7 @@
-//const http = require('http')
+require('dotenv').config(); 
 const express = require('express')
 const cors = require('cors')
+const Note = require('./models/note')
 
 const app = express()
 
@@ -33,23 +34,29 @@ app.use((req, res, next) => {
 });
 
 
-app.get('/',(request, response) => {
-  response.send('<h1> Hello World! </h1>')
-})
+//app.get('/',(request, response) => {
+//  response.send('<h1> Hello World! </h1>')
+//})
 
 app.get('/api/notes',(request, response) => {
   response.send(notes)
 })
 
+//app.get('/api/notes/:id', (request, response) => {
+//  const id = request.params.id
+//  const note = notes.find(note => note.id === id)
+//  
+//  if (note) {
+//    response.json(note)
+//  } else {
+//    response.status(404).end()
+//  }
+//})
+
 app.get('/api/notes/:id', (request, response) => {
-  const id = request.params.id
-  const note = notes.find(note => note.id === id)
-  
-  if (note) {
+  Note.findById(request.params.id).then(note => {
     response.json(note)
-  } else {
-    response.status(404).end()
-  }
+  })
 })
 
 const generateId = () => {
@@ -59,24 +66,41 @@ const generateId = () => {
   return String(maxId + 1)
 }
 
+//app.post('/api/notes', (request, response) => {
+//  const body = request.body
+//
+//  if (!body.content) {
+//    return response.status(400).json({ 
+//      error: 'content missing' 
+//    })
+//  }
+//
+//  const note = {
+//    content: body.content,
+//    important: Boolean(body.important) || false,
+//    id: generateId(),
+//  }
+//
+//  notes = notes.concat(note)
+//
+//  response.json(note)
+//})
+
 app.post('/api/notes', (request, response) => {
   const body = request.body
 
-  if (!body.content) {
-    return response.status(400).json({ 
-      error: 'content missing' 
-    })
+  if (body.content === undefined) {
+    return response.status(400).json({ error: 'content missing' })
   }
 
-  const note = {
+  const note = new Note({
     content: body.content,
-    important: Boolean(body.important) || false,
-    id: generateId(),
-  }
+    important: body.important || false
+  })
 
-  notes = notes.concat(note)
-
-  response.json(note)
+  note.save().then(savedNote => {
+    response.json(savedNote)
+  })
 })
 
 app.delete('/api/notes/:id', (request, response) => {
@@ -102,3 +126,13 @@ const PORT = process.env.PORT || 3000
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on ${PORT}`);
 });
+
+
+/* Mongoose */
+
+
+app.get('/api/notes', (request, response) => {
+  Note.find({}).then(notes => {
+    response.json(notes)
+  })
+})

@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./models/persons')
 
 const app = express()
 
@@ -47,40 +49,50 @@ let persons = [
   }
 ]
 
-app.get('/info',(request, response) => {
-  const numberOfPersons = persons.length; // Calculate the number of people in the array
-  const currentDate = new Date(); // Get the current date and time
+app.get('/info', (request, response) => {
+  Person.find({}).then(persons => {
+    const numberOfPersons = persons.length; // Calculate the number of people in the array
+    const currentDate = new Date(); // Get the current date and time
 
-  response.send(`
-    <p> Phonebook has info for ${numberOfPersons} people.</p>
-    <p>${currentDate} </p>
+    response.send(`
+      <p> Phonebook has info for ${numberOfPersons} people.</p>
+      <p>${currentDate} </p>
     `)
+  }).catch(error => {
+    response.status(500).json({ error: 'Failed to fetch persons' })
+  })
 })
 
 app.get('/api/persons',(request, response) => {
-  response.send(persons)
+  Person.find({}).then(persons => {
+    response.json(persons)
+  }).catch(error => {
+    response.status(500).json({ error: 'Failed to fetch persons' })
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
   const id = request.params.id
-  const person = persons.find(person => person.id === id)
+  //const person = persons.find(person => person.id === id)
   
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
+  Person.findById(id).then(person => {
+  
+    if (person) {
+      response.json(person)
+    } else {
+      response.status(404).end()
+    }
+  })
 })
 
-const generateId = () => {
-  const range = 1000000000
-  const maxId = Math.floor(Math.random()*range)+1
-  return String(maxId)
-}
+//const generateId = () => {
+//  const range = 1000000000
+//  const maxId = Math.floor(Math.random()*range)+1
+//  return String(maxId)
+//}
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  const personExists = persons.some(person => person.name === body.name)
 
   if (!body.name || !body.number) {
     return response.status(400).json({ 
@@ -88,28 +100,37 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  if (personExists) {
-    return response.status(400).json({ 
-      error: 'Name already exists' 
+  Person.findOne({ name: body.name }).then(personExists => {
+    if (personExists) {
+      return response.status(400).json({ 
+        error: 'Name already exists' 
+      })
+    }
+
+    const person = new Person({
+      name: body.name,
+      number: body.number
     })
-  }
 
-  const person = {
-    name: body.name,
-    number: body.number,
-    id: generateId()
-  }
-
-  persons = persons.concat(person)
-
-  response.json(person)
+    person.save().then(savedPerson => {
+      response.json(savedPerson)
+    }).catch(error => {
+      response.status(500).json({ error: 'Failed to save person' })
+    })
+  }).catch(error => {
+    response.status(500).json({ error: 'Failed to check if person exists' })
+  })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
-  persons = persons.filter(person => person.id !== id)
+  //persons = persons.filter(person => person.id !== id)
 
-  response.status(204).end()
+  Person.findOneAndDelete({_id: id}).then(() => {
+    response.status(204).end()
+  })
+
+  //response.status(204).end()
 })
 
 
