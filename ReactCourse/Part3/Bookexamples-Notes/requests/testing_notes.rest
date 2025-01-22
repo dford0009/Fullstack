@@ -1,0 +1,42 @@
+POST http://localhost:3000/api/notes 
+Content-Type: application/json
+
+{
+  "content": "Ensure everything still works",
+  "important": true
+}
+
+###VALIDATION TEST
+POST http://localhost:3000/api/notes 
+Content-Type: application/json
+
+{
+  "content": "En",
+  "important": true
+}
+
+###GET EVERYTHING
+GET http://localhost:3000/api/notes
+
+###GET SINGLE NOT FOUND
+GET http://localhost:3000/api/notes/6780a7bddbc1fc60344dcd91
+
+###GET SINGLE FOUND
+GET http://localhost:3000/api/notes/67833448e27e3eb2bc04c1f4
+
+###GET SINGLE FOUND MALFORMED ID
+GET http://localhost:3000/api/notes/67833448e27e
+
+###DELETE NOTE
+DELETE http://localhost:3000/api/notes/6780a7bddbc1fc60344dcd91
+
+###Update note
+PUT http://localhost:3000/api/notes/679063476d6eaab341360432
+Content-Type: application/json
+
+{
+  "important": false
+}
+
+###Unknown endpoint
+GET http://localhost:3000/api/note

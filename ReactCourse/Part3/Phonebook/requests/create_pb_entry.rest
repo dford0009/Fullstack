@@ -2,22 +2,60 @@ POST http://localhost:3000/api/persons
 Content-Type: application/json
 
 {
-  "name": "Sam Heartfield",
+  "name": "Nathan Ford",
   "number": "903-66666"
 }
 //ADD NEW PERSON
+
+###DATA VALIDATION PHONE # FORMAT
+POST http://localhost:3000/api/persons 
+Content-Type: application/json
+
+{
+  "name": "Nat Ford",
+  "number": "90366666"
+}
+
+###DATA VALIDATION
+POST http://localhost:3000/api/persons 
+Content-Type: application/json
+
+{
+  "name": "Na",
+  "number": "903-66666"
+}
+
+###DATA VALIDATION
+POST http://localhost:3000/api/persons 
+Content-Type: application/json
+
+{
+  "number": "1234567890"
+}
+
+###DATA VALIDATION
+POST http://localhost:3000/api/persons 
+Content-Type: application/json
+
+{
+  "name": "Lewis Ford"
+}
 
 ###
 DELETE http://localhost:3000/api/persons/6781e0dab13af62a63ab840b
 //DELETE PERSON
 
 ###
-GET http://localhost:3000/api/persons 
+GET http://localhost:3000/api/persons
 //GET ALL PERSONS
 
 ###
 GET http://localhost:3000/info
 //GET INFO
+
+### 
+GET http://localhost:3000/api/persons/6781e0dab13af62a63
+//MALFORMATTED ID
 
 ### 
 GET http://localhost:3000/api/persons/6781e0dab13af62a63ab840b
@@ -26,3 +64,12 @@ GET http://localhost:3000/api/persons/6781e0dab13af62a63ab840b
 ###
 GET http://localhost:3000/api/persons/6781e466dc984346a76a35db
 //FOUND PERSON
+
+###UPDATE PERSON
+PUT http://localhost:3000/api/persons/678ec6830f88b082296b0d56
+Content-Type: application/json
+
+{
+  "name": "Nathan Ford",
+  "number": "1111111111"
+}
